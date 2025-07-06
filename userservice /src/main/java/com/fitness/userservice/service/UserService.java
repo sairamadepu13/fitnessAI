@@ -18,13 +18,10 @@ public class UserService {
        User user = repository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not Found"));
         UserResponse userResponse =  new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setPassword(user.getPassword());
         userResponse.setEmail(user.getEmail());
         userResponse.setFirstName(user.getFirstName());
         userResponse.setLastName(user.getLastName());
         userResponse.setCreatedAt(user.getCreatedAt());
-        userResponse.setUpdatedAt(user.getUpdatedAt());
         return userResponse;
     }
     public UserResponse register(@Valid RegisterRequst request) {
@@ -38,12 +35,10 @@ public class UserService {
 
         UserResponse userResponse =  new UserResponse();
         userResponse.setId(savedUser.getId());
-        userResponse.setPassword(savedUser.getPassword());
         userResponse.setEmail(savedUser.getEmail());
         userResponse.setFirstName(savedUser.getFirstName());
         userResponse.setLastName(savedUser.getLastName());
         userResponse.setCreatedAt(savedUser.getCreatedAt());
-        userResponse.setUpdatedAt(savedUser.getUpdatedAt());
         return userResponse;
     }
 }
