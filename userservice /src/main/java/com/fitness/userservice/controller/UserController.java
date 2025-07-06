@@ -3,7 +3,6 @@ package com.fitness.userservice.controller;
 
 import com.fitness.userservice.dto.RegisterRequst;
 import com.fitness.userservice.dto.UserResponse;
-import com.fitness.userservice.repository.UserRepository;
 import com.fitness.userservice.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
