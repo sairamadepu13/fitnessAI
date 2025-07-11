@@ -1,14 +1,15 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: userservice
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/fitness_user_db
+    username: postgres
+    password: 2411
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-server:
-  port: ${SERVER_PORT}
