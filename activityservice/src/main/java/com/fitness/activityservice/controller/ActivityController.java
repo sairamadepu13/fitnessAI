@@ -31,7 +31,7 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Activity>> geyActivity(@PathVariable String id){
+    public ResponseEntity<ActivityResponse> geyActivity(@PathVariable String id){
         return ResponseEntity.ok(activityService.getActivity(id));
     }
 

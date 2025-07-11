@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,10 @@ public class ActivityService {
         return responses1;
     }
 
-    public Optional<Activity> getActivity(String id) {
-        return activityRepository.findById(id);
+    public ActivityResponse getActivity(String id) {
+
+        return activityRepository.findById(id)
+                .map(this::mapToResponse)
+                .orElseThrow(() -> new NoSuchElementException("Activity not found with id: " + id));
     }
 }
