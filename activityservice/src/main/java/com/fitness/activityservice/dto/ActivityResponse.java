@@ -18,7 +18,9 @@ public class ActivityResponse {
     private Integer caloriesBurned;
     private LocalDateTime date;
     private Map<String, Object> additionalMatrics;
+    @JsonIgnore
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAT;
 
 }

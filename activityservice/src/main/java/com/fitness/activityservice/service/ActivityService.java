@@ -7,6 +7,10 @@ import com.fitness.activityservice.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class ActivityService {
 
@@ -39,5 +43,17 @@ public class ActivityService {
         response.setCreatedAt(activity.getCreatedAt());
         response.setUpdatedAT(activity.getUpdatedAT());
         return response;
+    }
+
+
+    public List<ActivityResponse> getAllActivity(String userId) {
+        List<Activity> responses = activityRepository.findByUserId(userId);
+        System.out.println(responses);
+        List<ActivityResponse> responses1 = responses.stream().map(this::mapToResponse).collect(Collectors.toList());
+        return responses1;
+    }
+
+    public Optional<Activity> getActivity(String id) {
+        return activityRepository.findById(id);
     }
 }
