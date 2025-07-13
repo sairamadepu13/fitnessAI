@@ -5,9 +5,11 @@ import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.model.User;
 import com.fitness.userservice.repository.UserRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -40,5 +42,11 @@ public class UserService {
         userResponse.setLastName(savedUser.getLastName());
         userResponse.setCreatedAt(savedUser.getCreatedAt());
         return userResponse;
+    }
+
+    public Boolean existByUserId(String userId) {
+
+        log.info("Calling USer Validation API for UserId: {}",userId);
+        return repository.existsById(userId);
     }
 }
