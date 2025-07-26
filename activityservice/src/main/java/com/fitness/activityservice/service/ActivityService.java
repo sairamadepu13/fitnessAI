@@ -6,7 +6,9 @@ import com.fitness.activityservice.model.Activity;
 import com.fitness.activityservice.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +16,20 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ActivityService {
 
     private final UserValidationService userValidationService;
     private final ActivityRepository activityRepository;
+    private final RabbitTemplate rabbitTemplate;
 
-//    public ActivityService(UserValidationService userValidationService, ActivityRepository activityRepository){
-//        this.userValidationService = userValidationService;
-//        this.activityRepository = activityRepository;
-//    }
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
 
 
     public ActivityResponse trackActivity(ActivityRequest request) {
@@ -43,6 +48,14 @@ public class ActivityService {
                 .build();
         Activity savedActivity = activityRepository.save(activity);
 
+        //publish to Rabbitmq for AI processing
+        try {
+            log.info("Recevied activid");
+            rabbitTemplate.convertAndSend(exchange,routingKey,savedActivity);
+        }catch (Exception e){
+            log.error("failed to publish activity to Rabbitmq : " +e);
+
+        }
         return mapToResponse(savedActivity);
     }
 

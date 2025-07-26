@@ -13,3 +13,24 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  exchange:
+    name: fitness.exchange
+  queue:
+    name:
+      activity.queue
+  routing:
+    key:
+      activity.tracking
+
+
+gemini:
+  api:
+    url: ${GEMINI_API_URI}
+    key: ${GEMINI_API_KEY}
