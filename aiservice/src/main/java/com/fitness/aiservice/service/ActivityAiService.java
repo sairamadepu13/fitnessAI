@@ -52,13 +52,13 @@ public class ActivityAiService {
             StringBuilder fullAnalysis = new StringBuilder();
             addAnalysisSection(fullAnalysis, analysisNode, "overall", "overall:");
             addAnalysisSection(fullAnalysis, analysisNode, "pace", "pace:");
-            addAnalysisSection(fullAnalysis, analysisNode, "heartRate", "Heart Rate:");
+            addAnalysisSection(fullAnalysis, analysisNode, "heartrate", "Heart Rate:");
             addAnalysisSection(fullAnalysis, analysisNode, "caloriesBurned", "Calories:");
 
 
-            List<String> improvements = extractImprovements(analysisNode.path("improvements"));
-            List<String> suggestions = extractSuggestions(analysisNode.path("suggestions"));
-            List<String> safety = extractSafety(analysisNode.path("safetys"));
+            List<String> improvements = extractImprovements(mapper.readTree(jsonContent).path("improvements"));
+            List<String> suggestions = extractSuggestions(mapper.readTree(jsonContent).path("suggestions"));
+            List<String> safety = extractSafety(mapper.readTree(jsonContent).path("safty"));
 
             return Recommendation.builder()
                     .activityId(activity.getId())
@@ -106,8 +106,10 @@ public class ActivityAiService {
         List<String> suggestions = new ArrayList<>();
         if (suggestionsNode.isArray()) {
             suggestionsNode.forEach(suggestion -> {
-                String ares = suggestion.path("area").asText();
-                String detail = suggestion.path("recommendation").asText();
+                String area = suggestion.path("wprkout").asText();
+                String details = suggestion.path("description").asText();
+                suggestions.add(area);
+                suggestions.add(details);
             });
         }
         return suggestions.isEmpty() ?
@@ -118,12 +120,14 @@ public class ActivityAiService {
         List<String> improvements = new ArrayList<>();
         if (improvementsNode.isArray()) {
             improvementsNode.forEach(improvement -> {
-                String ares = improvement.path("area").asText();
-                String detail = improvement.path("recommendation").asText();
+                String area = improvement.path("area").asText();
+                String details = improvement.path("recommendation").asText();
+                improvements.add(area);
+                improvements.add(details);
             });
         }
         return improvements.isEmpty() ?
-                Collections.singletonList("NO Specific improvmentrs provided") : improvements;
+                Collections.singletonList("No specific improvements provided") : improvements;
     }
 
     private void addAnalysisSection(StringBuilder fullAnalysis, JsonNode analysisNode, String key, String prefix) {
